@@ -22,7 +22,7 @@ help_message="Usage: $0 --dataset [hey_snips|mobvoi|speech_commands] [options]"
 # ======================== 路径设置 ========================
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH}"
+export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH:-}"
 export PATH="${PROJECT_DIR}/tools:${PATH}"
 
 mkdir -p "${dl_dir}" "${output_dir}"

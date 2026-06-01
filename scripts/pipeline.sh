@@ -67,7 +67,7 @@ Options:
 # ======================== 参数解析 ========================
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH}"
+export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH:-}"
 export PATH="${PROJECT_DIR}/tools:${PATH}"
 
 # 解析 stage/stop_stage 等参数

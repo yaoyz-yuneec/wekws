@@ -29,7 +29,7 @@ help_message="Usage: $0 --model_dir exp/ds_tcn [options]"
 # ======================== 路径设置 ========================
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH}"
+export PYTHONPATH="${PROJECT_DIR}:${PYTHONPATH:-}"
 export PATH="${PROJECT_DIR}/tools:${PATH}"
 
 # 自动设置评分 checkpoint
