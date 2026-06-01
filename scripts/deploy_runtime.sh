@@ -11,7 +11,7 @@ set -euo pipefail
 # ======================== 默认参数 ========================
 build_type=Release            # Release | Debug
 build_dir=build               # 构建目录
-onnx_version=1.12.0           # ONNX Runtime 版本
+onnx_version=auto             # ONNX Runtime 版本 (auto: 从本地 whl 提取, 否则用 1.12.0)
 with_streaming=true           # 编译流式 KWS (依赖 portaudio)
 toolchain=                    # 交叉编译 toolchain 文件路径 (aarch64 需指定)
 
@@ -23,6 +23,20 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 RUNTIME_DIR="${PROJECT_DIR}/runtime"
 BUILD_DIR="${RUNTIME_DIR}/${build_dir}"
+LOCAL_WHEEL_DIR="${PROJECT_DIR}/jetson_local_wheels"
+
+# ---------- 自动检测本地 onnxruntime whl 并提取版本 ----------
+LOCAL_ONNX=$(ls "${LOCAL_WHEEL_DIR}/onnxruntime"*"linux_aarch64.whl" 2>/dev/null | head -1 || true)
+if [ "${onnx_version}" = "auto" ]; then
+  if [ -n "${LOCAL_ONNX}" ]; then
+    # 从 whl 文件名提取版本号: onnxruntime_gpu-1.18.0-cp310-...
+    onnx_version=$(basename "${LOCAL_ONNX}" | sed -n 's/.*-\([0-9]*\.[0-9]*\.[0-9]*\)-.*/\1/p')
+    echo "[INFO] 从本地 whl 检测到 ONNX Runtime v${onnx_version}"
+  else
+    onnx_version="1.12.0"
+    echo "[INFO] 使用默认 ONNX Runtime v${onnx_version}"
+  fi
+fi
 
 echo "=========================================="
 echo "  构建类型: ${build_type}"
