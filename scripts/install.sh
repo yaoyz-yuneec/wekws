@@ -5,12 +5,13 @@
 # 一键安装脚本 —— 配置 WeKws 完整运行环境
 # 自动检测当前设备的 CUDA 版本，若 jetson_local_wheels/ 有本地 whl 则优先使用
 # 环境管理: conda > venv, 优先使用 conda, 不存在则自动创建 venv
-# 用法: bash scripts/install.sh [--env-name wekws] [--python 3.10] [--cuda auto]
+# 用法: bash scripts/install.sh [--env-name wekws_env] [--venv-dir wekws_venv] [--python 3.10] [--cuda auto]
 
 set -euo pipefail
 
 # 默认参数
-ENV_NAME="wekws_env"             # conda 环境名 或 venv 目录名
+ENV_NAME="wekws_env"             # conda 环境名
+VENV_DIR_NAME="wekws_venv"       # venv 目录名 (与项目 Python 包名错开)
 PYTHON_VERSION="3.10"
 CUDA_VERSION="auto"          # auto: 自动检测 | 12.4 | 12.1 | 11.8 | cpu
 INSTALL_TORCH=true
@@ -18,7 +19,7 @@ INSTALL_SOX=true
 INSTALL_PRE_COMMIT=true
 USE_CONDA="auto"             # auto: 有 conda 则用, 否则 venv | true: 强制 conda | false: 强制 venv
 
-help_message="Usage: $0 [--env-name wekws_env] [--python 3.10] [--cuda auto] [--use-conda auto] [--no-torch] [--no-sox] [--no-pre-commit]"
+help_message="Usage: $0 [--env-name wekws_env] [--venv-dir wekws_venv] [--python 3.10] [--cuda auto] [--use-conda auto] [--no-torch] [--no-sox] [--no-pre-commit]"
 . "$(dirname "$0")/../tools/parse_options.sh" || exit 1
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -39,7 +40,7 @@ elif [ "${USE_CONDA}" = "auto" ] && $HAVE_CONDA; then
   USE_CONDA_BOOL=true
 fi
 
-ENV_DIR="${PROJECT_DIR}/${ENV_NAME}"  # venv 时使用
+ENV_DIR="${PROJECT_DIR}/${VENV_DIR_NAME}"  # venv 目录路径
 
 if $USE_CONDA_BOOL; then
   # ==================== Conda 模式 ====================
@@ -205,7 +206,7 @@ if $USE_CONDA_BOOL; then
   echo "[SUCCESS] WeKws 环境配置完成！(conda)"
   echo "        激活环境: conda activate ${ENV_NAME}"
 else
-  echo "[SUCCESS] WeKws 环境配置完成！(venv)"
+  echo "[SUCCESS] WeKws 环境配置完成！(venv, ${VENV_DIR_NAME}/)"
   echo "        激活环境: source ${ENV_DIR}/bin/activate"
 fi
 echo "        查看用法: bash scripts/pipeline.sh --help"
