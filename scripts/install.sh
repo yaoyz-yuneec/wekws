@@ -10,7 +10,7 @@
 set -euo pipefail
 
 # 默认参数
-ENV_NAME="wekws"             # conda 环境名 或 venv 目录名
+ENV_NAME="wekws_env"             # conda 环境名 或 venv 目录名
 PYTHON_VERSION="3.10"
 CUDA_VERSION="auto"          # auto: 自动检测 | 12.4 | 12.1 | 11.8 | cpu
 INSTALL_TORCH=true
@@ -18,7 +18,7 @@ INSTALL_SOX=true
 INSTALL_PRE_COMMIT=true
 USE_CONDA="auto"             # auto: 有 conda 则用, 否则 venv | true: 强制 conda | false: 强制 venv
 
-help_message="Usage: $0 [--env-name wekws] [--python 3.10] [--cuda auto] [--use-conda auto] [--no-torch] [--no-sox] [--no-pre-commit]"
+help_message="Usage: $0 [--env-name wekws_env] [--python 3.10] [--cuda auto] [--use-conda auto] [--no-torch] [--no-sox] [--no-pre-commit]"
 . "$(dirname "$0")/../tools/parse_options.sh" || exit 1
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
