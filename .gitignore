@@ -37,3 +37,5 @@ data
 raw_wav
 tensorboard
 **/*build*
+wekws_env/
+jetson_local_wheels/
